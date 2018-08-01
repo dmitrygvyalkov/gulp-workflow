@@ -1,0 +1,16 @@
+.svgicon {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  fill: inherit;
+  stroke: inherit;
+}
+
+
+<% _.forEach(svg, function(svgItem) { %>
+
+.svgicon--<%=svgItem.name%> {
+  font-size:<%= svgItem.relHeight %>px;
+  width:<%= svgItem.relWidth/svgItem.relHeight %>em;
+}
+<% }); %>

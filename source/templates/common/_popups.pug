@@ -1,0 +1,30 @@
+.popups
+  #callback.modal_div.recall.popups_form
+    .popups_wrp
+      form.form_form(action="/", method="post")
+        .form_line
+          .popups_title.recall_title Заказ обратного звонка
+          .popups_subtitle.recall_subtitle Заполните форму и мы свяжемся с&nbsp;Вами  в ближайшее время
+
+        .form_line.form_line--cell
+          .recall_cell
+            label.form_label
+              .form_placeholder Введите имя
+              input.form_input(type="text", name="name", placeholder="Ваше имя")
+              
+          .recall_cell
+            label.form_label
+              .form_placeholder Введите омер телефона (обязательно)
+              input.form_input(type="tel", name="tel", placeholder="Ваш телефон", required)
+        .form_line.form_line--disclaimer
+          .form_disclaimer
+            label.form_label
+              input.form_disclaimer-checkbox(type="checkbox", checked)
+              .form_checkbox
+              | Согласен с 
+              a.form_link-disclaimer.popup_action--show(href="#politics") пполитикой конфиденциальности
+        .form_line
+          .form_btn-wrp
+            button.form_btn.btn.btn--red(type="submit") Заказать звонок
+
+  
