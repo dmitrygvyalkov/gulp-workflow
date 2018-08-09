@@ -6,6 +6,7 @@
     $.gulp.task('spritesmith:process', function() {
 
       var spriteData = $.gulp.src($.path.sprite)
+        .pipe($.$gulp.plumber())
         .pipe($.$gulp.spritesmith({
             imgName: 'sprite.png',
             cssName: '_sprite.scss',
