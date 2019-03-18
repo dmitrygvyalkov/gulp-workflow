@@ -2,20 +2,18 @@
   'use strict';
 
   var task = [
-    './project/tasks/sass.process.js',
-    './project/tasks/sass.release.js',
-    './project/tasks/js.lint.js',
-    './project/tasks/js.foundation.js',
-    './project/tasks/js.process.js',
-    './project/tasks/js.release.js',
-    './project/tasks/spritesmith.process.js',
-    './project/tasks/svgsprites.process.js',
-    './project/tasks/svgsprites.scss.js',
-    './project/tasks/service.server.js',
+    './project/tasks/js.develop.js',
+    './project/tasks/js.build.js',
+    './project/tasks/styles.develop.js',
+    './project/tasks/styles.build.js',
     './project/tasks/service.clean.js',
-    './project/tasks/copy.resource.js',
-    './project/tasks/copy.images.js',
-    './project/tasks/jade.process.js'
+    './project/tasks/service.watch.js',
+    './project/tasks/service.server.js',
+    './project/tasks/templates.develop.js',
+    './project/tasks/templates.build.js',
+    './project/tasks/copy.resources.js',
+    './project/tasks/sprites.png.js',
+    './project/tasks/sprites.svg.js',
   ];
 
   module.exports = task;

@@ -1,0 +1,29 @@
+(function() {
+  'use strict';
+
+  var builder = function($) {
+
+    $.gulp.task('styles:build', function() {
+    	var plugins = [
+          $.autoprefixer({
+            browsers: ['last 3 version', '> 1%', 'ie 8', 'ie 9', 'Opera 12.1'],
+            cascade: true
+          }),
+          $.cssnano(),
+        ];
+
+      var options = {
+        includePaths: $.path.styles.includes,
+      };
+
+      return $.gulp.src($.path.styles.src)
+        .pipe($.if($.debug, $.sourcemaps.init()))
+        .pipe($.scss(options).on('error', $.scss.logError))
+        .pipe($.postcss(plugins))
+        .pipe($.if($.debug, $.sourcemaps.write('./')))
+        .pipe($.gulp.dest($.path.styles.dest));
+    });
+  };
+
+  module.exports = builder;
+})();

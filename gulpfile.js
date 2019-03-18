@@ -1,73 +1,63 @@
-var $ = {
-  package: require('./package.json'),
-  config: require('./project/config.js'),
-  path: {
-    system: require('./project/path.system.js'),
-    foundation: require('./project/path.foundation.js'),
-    app: require('./project/path.app.js'),
-    sass: require('./project/path.sass.js'),
-    sprite: require('./project/path.sprite.js'),
-    template: require('./project/path.template.js'),
-    task: require('./project/path.task.js')
-  },
-  browserSync: require('browser-sync'),
-  sequence: require('run-sequence'),
-  rimraf: require('rimraf'),
-  gulp: require('gulp'),
-  merge: require('merge-stream'),
-  $gulp: require('gulp-load-plugins')({
-    lazy: false,
-    rename: {
-      'gulp-replace-task': 'replace',
-      'gulp-svg-sprites': 'svgsprites',
-      'gulp.spritesmith': 'spritesmith'
-    }
-  })
+$ = {
+	debug: true,
+	mode: 'development',
+	package: require('./package.json'),
+	path: {
+		build: './build',
+    	source: './source',
+    	task: require('./project/path.task.js'),
+		template: require('./project/path.template.js'),
+		styles: require('./project/path.styles.js'),
+		js: require('./project/path.javascript.js'),
+		resources: require('./project/path.resources.js'),
+		sprites: require('./project/path.sprites.js'),
+	},
+	gulp: require('gulp'),
+	pug:  require('gulp-pug'),
+	scss: require('gulp-sass'),
+	autoprefixer: require('autoprefixer'),
+	del: require('del'),
+	color: require('ansi-colors'),
+	webpack: require('webpack'),
+	gulpWebpack: require('webpack-stream'),
+	browserSync: require('browser-sync').create(),
+	changed: require('gulp-changed'),
+	spritesmith: require('gulp.spritesmith'),
+	merge: require('merge-stream'),
+	plumber: require('gulp-plumber'),
+	rename: require('gulp-rename'),
+	svgsprites: require('gulp-svg-sprites'),
+	svgmin: require('gulp-svgmin'),
+	cheerio: require('gulp-cheerio'),
+	replace: require('gulp-replace-task'),
+	cssnano: require('cssnano'),
+	postcss: require('gulp-postcss'),
+	sourcemaps: require('gulp-sourcemaps'),
+	if: require('gulp-if'),
 };
 
-$.debug = true;
-
+// Load Tasks
 $.path.task.forEach(function(taskPath) {
   var builder = require(taskPath)($);
 });
 
-$.gulp.task('default', function() {
-  $.sequence(
-    'spritesmith:process',
-    'svgsprites:scss',
-    'svgsprites:process',
-    [
-      'js:process',
-      'js:foundation',
-      'scss:process',
-      'jade:process',
-      'copy:resource',
-      'copy:images',
-    ],
-    'service:server'
-  );
-});
+// Build task
+$.gulp.task('build', $.gulp.series(
+	'service:clean',
+	'sprites:png',
+	'sprites:svg',
+	'copy:resources',
+	$.gulp.parallel('styles:build', 'templates:build', 'js:build')
+	));
 
-$.gulp.task('build', function(cb) {
-  $.debug = false;
+// Default (develop) task
+$.gulp.task('dev', $.gulp.series(
+	'service:clean',
+	'sprites:png',
+	'sprites:svg',
+	'copy:resources',
+	$.gulp.parallel('styles:develop', 'templates:develop', 'js:develop'),
+	$.gulp.parallel('service:watch', 'service:server')
+	));
 
-  $.sequence(
-    'service:clean',
-    'spritesmith:process',
-    'svgsprites:scss',
-    'svgsprites:process',
-    'js:lint',
-    [
-      'js:release',
-      'js:foundation',
-      'scss:release',
-      'jade:process',
-      'copy:resource',
-      'copy:images',
-    ],
-    'service:server',
-    function(cb) {
-      console.log('Built has been completed.');
-    }
-  );
-});
+$.gulp.task('default', $.gulp.series('dev'));

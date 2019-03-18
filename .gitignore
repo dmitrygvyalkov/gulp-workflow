@@ -35,6 +35,8 @@ dist
 build
 inbox
 source/resources/video
+source/scss/sprites
+source/scss/svgsprites
 
 # Node.JS
 node_modules

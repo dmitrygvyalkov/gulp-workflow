@@ -3,14 +3,14 @@
 
   var builder = function($) {
 
-    $.gulp.task('svgsprites:process', function() {
-      return $.gulp.src('./source/images/svg/*.svg')
-        .pipe($.$gulp.svgmin({
+    $.gulp.task('sprites:svg', function() {
+      return $.gulp.src($.path.sprites.svg)
+        .pipe($.svgmin({
           js2svg: {
             pretty: true
           }
         }))
-        .pipe($.$gulp.cheerio({
+        .pipe($.cheerio({
           run: function ($) {
             $('[fill]').removeAttr('fill');
             $('[style]').removeAttr('style');
@@ -18,15 +18,16 @@
           },
           //parserOptions: { xmlMode: true }
         }))
-        .pipe($.$gulp.replace('&gt;', '>'))
-        .pipe($.$gulp.svgsprites({
+        .pipe($.replace('&gt;', '>'))
+        .pipe($.svgsprites({
           mode: "symbols",
           preview: false,
-          selector: "icon-%f",
+          selector: "svg-%f",
           
           svg: {
-            symbols: "build/assets/images/svgsprite.svg"
+            symbols: $.path.sprites.svgDest
           },
+
         }))
         .pipe($.gulp.dest("./"));
 
